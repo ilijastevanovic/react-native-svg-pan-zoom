@@ -309,6 +309,7 @@ export default class SvgPanZoom extends Component<Props, State> {
 
     if (!this.state.isScaling) {
       this.setState({
+        isMoving: false,
         isScaling: true,
         initialDistance: distance,
         initialTransform: this.state.viewTransform,
