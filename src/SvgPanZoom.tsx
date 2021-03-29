@@ -167,20 +167,17 @@ export default class SvgPanZoom extends Component<Props, State> {
           this.processTouch(gestureState);
         }
       },
-      onPanResponderTerminationRequest: (evt, gestureState) => {
-        console.log("termination with pan... touch count: " + evt.nativeEvent.touches.length);
-        return evt.nativeEvent.touches.length > 1;
-      },
+      onPanResponderTerminationRequest: (evt, gestureState) => false,
       onPanResponderRelease: (evt, gestureState) => {
         this.setState({
           isScaling: false,
           isMoving: false,
         });
+        console.log("On release... touch count: " + evt.nativeEvent.touches.length);
+        return true;
       },
-      onPanResponderTerminate: (evt, gestureState) => { },
-      onResponderTerminationRequest: (evt) => {
-        console.log("termination w/o pan... touch count: " + evt.nativeEvent.touches.length);
-        return evt.nativeEvent.touches.length > 1;
+      onPanResponderTerminate: (evt, gestureState) => {
+        console.log("On terminate... touch count: " + evt.nativeEvent.touches.length);
       },
     })
 
