@@ -402,7 +402,7 @@ export default class SvgPanZoom extends Component<Props, State> {
       this.setState({
         isScaling: false,
         isMoving: true,
-        initialGestureState: { dy: 0, dx: 0 },
+        initialGestureState: gestureState,
         initialTransform: this.state.viewTransform,
       })
       return
