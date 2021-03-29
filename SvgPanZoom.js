@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, PanResponder, Animated, StyleSheet } from 'react-native';
+import { View, PanResponder, Animated, StyleSheet, TouchableWithoutFeedback, } from 'react-native';
 import Svg from 'react-native-svg';
 const SvgView = Svg;
 import { createIdentityTransform, calcDistance, calcCenter, createScalingMatrix, createTranslationMatrix, viewTransformMult, getBoundedPinchTransform, getBoundedTouchTransform } from './util';
@@ -179,10 +179,10 @@ export default class SvgPanZoom extends Component {
     componentWillMount() {
         this.state.scaleAnimation.addListener((zoom) => { this.props.onZoom(zoom.value); });
         this.prInstance = PanResponder.create({
-            onStartShouldSetPanResponder: (evt, gestureState) => false,
-            onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
+            onStartShouldSetPanResponder: (evt, gestureState) => true,
+            onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
             onMoveShouldSetPanResponder: (evt, gestureState) => true,
-            onMoveShouldSetPanResponderCapture: (evt, gestureState) => false,
+            onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
             onPanResponderGrant: (evt, gestureState) => {
                 // Set self for filtering events from other PanResponderTarges
                 if (this.prTargetSelf == null) {
@@ -238,20 +238,20 @@ export default class SvgPanZoom extends Component {
             },
             viewStyle
         ])} onLayout={this._onLayout} {...this.prInstance.panHandlers}>
-
-        <Animated.View style={Object.assign({ width: canvasWidth, height: canvasHeight, transform: [
+        <TouchableWithoutFeedback>
+          <Animated.View style={Object.assign({ width: canvasWidth, height: canvasHeight, transform: [
                 { translateX: this.state.TranslationAnimation.x },
                 { translateY: this.state.TranslationAnimation.y },
                 { scale: this.state.scaleAnimation }
             ] }, canvasStyle)}>
-          <SvgView style={{
+            <SvgView style={{
             width: canvasWidth,
             height: canvasHeight,
         }}>
-            {children}
-          </SvgView>
-        </Animated.View>
-
+              {children}
+            </SvgView>
+          </Animated.View>
+        </TouchableWithoutFeedback>
       </View>);
     }
     getInitialViewTransform(canvasWidth, canvasHeight, scale) {

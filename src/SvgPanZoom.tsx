@@ -5,7 +5,8 @@ import {
   PanResponder, PanResponderInstance,
   Animated,
   ViewStyle,
-  StyleSheet
+  StyleSheet,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import Svg from 'react-native-svg';
@@ -126,10 +127,10 @@ export default class SvgPanZoom extends Component<Props, State> {
     this.state.scaleAnimation.addListener((zoom)=> { this.props.onZoom(zoom.value) })
 
     this.prInstance = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => false,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => false,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
       onPanResponderGrant: (evt, gestureState) => {
         // Set self for filtering events from other PanResponderTarges
         if (this.prTargetSelf == null) { 
@@ -199,29 +200,29 @@ export default class SvgPanZoom extends Component<Props, State> {
         onLayout={this._onLayout}
         {...this.prInstance.panHandlers}
       >
-
-        <Animated.View
-          style={{
-            width: canvasWidth,
-            height: canvasHeight,
-            transform: [
-              { translateX: this.state.TranslationAnimation.x },
-              { translateY: this.state.TranslationAnimation.y },
-              { scale: this.state.scaleAnimation }
-            ],
-            ...canvasStyle
-          }}
-        >
-          <SvgView
+        <TouchableWithoutFeedback>
+          <Animated.View
             style={{
               width: canvasWidth,
               height: canvasHeight,
+              transform: [
+                { translateX: this.state.TranslationAnimation.x },
+                { translateY: this.state.TranslationAnimation.y },
+                { scale: this.state.scaleAnimation }
+              ],
+              ...canvasStyle
             }}
           >
-            {children}
-          </SvgView>
-        </Animated.View>
-
+            <SvgView
+              style={{
+                width: canvasWidth,
+                height: canvasHeight,
+              }}
+            >
+              {children}
+            </SvgView>
+          </Animated.View>
+        </TouchableWithoutFeedback>
       </View>
     );
   }
