@@ -143,8 +143,6 @@ export default class SvgPanZoom extends Component<Props, State> {
 
         console.log('touch count: ' + touches.length);
 
-        // console.log('evt: ' + evt.target + '*************')
-
         if(this.dropNextEvt > 0) { 
           this.dropNextEvt--
           return 
@@ -169,7 +167,7 @@ export default class SvgPanZoom extends Component<Props, State> {
           this.processTouch(gestureState);
         }
       },
-      onPanResponderTerminationRequest: (evt, gestureState) => true,
+      onPanResponderTerminationRequest: (evt, gestureState) => false,
       onPanResponderRelease: (evt, gestureState) => {
         this.setState({
           isScaling: false,
@@ -177,6 +175,7 @@ export default class SvgPanZoom extends Component<Props, State> {
         });
       },
       onPanResponderTerminate: (evt, gestureState) => { },
+      onResponderTerminationRequest: () => false,
     })
 
   }
