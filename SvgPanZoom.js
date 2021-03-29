@@ -196,7 +196,6 @@ export default class SvgPanZoom extends Component {
             },
             onPanResponderMove: (evt, gestureState) => {
                 const touches = evt.nativeEvent.touches;
-                console.log('touch count: ' + touches.length);
                 if (this.dropNextEvt > 0) {
                     this.dropNextEvt--;
                     return;
@@ -212,10 +211,12 @@ export default class SvgPanZoom extends Component {
                     return;
                 }
                 if (touches.length === 2) {
-                    console.log("processing pinch");
                     this.processPinch(touches[0].pageX, touches[0].pageY, touches[1].pageX, touches[1].pageY);
                 }
-                else if (touches.length === 1 && !this.state.isScaling) {
+                else if (touches.length === 1) {
+                    this.setState({
+                        isScaling: false,
+                    });
                     this.processTouch(gestureState);
                 }
             },
@@ -225,12 +226,9 @@ export default class SvgPanZoom extends Component {
                     isScaling: false,
                     isMoving: false,
                 });
-                console.log("On release... touch count: " + evt.nativeEvent.touches.length);
                 return true;
             },
-            onPanResponderTerminate: (evt, gestureState) => {
-                console.log("On terminate... touch count: " + evt.nativeEvent.touches.length);
-            },
+            onPanResponderTerminate: (evt, gestureState) => { },
         });
     }
     render() {
