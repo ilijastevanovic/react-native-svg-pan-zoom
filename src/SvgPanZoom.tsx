@@ -161,9 +161,6 @@ export default class SvgPanZoom extends Component<Props, State> {
         if (touches.length === 2) {
           this.processPinch(touches[0].pageX, touches[0].pageY, touches[1].pageX, touches[1].pageY);
         } else if (touches.length === 1) {
-          this.setState({
-            isScaling: false,
-          });
           this.processTouch(gestureState);
         }
       },
@@ -402,9 +399,11 @@ export default class SvgPanZoom extends Component<Props, State> {
 
   processTouch = (gestureState) => {
     if (!this.state.isMoving) {
+      let initialGestureState = this.state.isScaling ? this.state.initialGestureState : { dy: 0, dx: 0 };
       this.setState({
+        isScaling: false,
         isMoving: true,
-        initialGestureState: { dy: 0, dx: 0 },
+        initialGestureState: initialGestureState,
         initialTransform: this.state.viewTransform,
       })
       return
